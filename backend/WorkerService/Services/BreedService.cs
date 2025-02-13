@@ -25,7 +25,7 @@ namespace WorkerService
             {
                 var response = await _apiClient.FetchBreedsAsync(nextPageLink);
 
-                if (response?.Data == null || !response.Status)
+                if (response?.Data == null)
                 {
                     Console.WriteLine($"Error fetching breeds: {response?.Message ?? "Unknown error"}");
                     break;
@@ -42,7 +42,7 @@ namespace WorkerService
                     {
                         Id = id,
                         Name = breedData.Name,
-                        Description = breedData.Description,
+                        Description = string.IsNullOrEmpty(breedData.Description) ? "" : breedData.Description,
                         LifeMin = breedData.LifeMin,
                         LifeMax = breedData.LifeMax,
                         MaleWeightMin = breedData.MaleWeightMin,

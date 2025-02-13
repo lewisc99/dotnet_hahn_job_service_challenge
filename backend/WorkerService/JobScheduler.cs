@@ -14,7 +14,7 @@ namespace WorkerService
             _recurringJobManager.AddOrUpdate<BreedJob>(
                 "BreedJob",
                 job => job.ExecuteAsync(),
-                Cron.Hourly);
+                Cron.Minutely);
         }
     }
 

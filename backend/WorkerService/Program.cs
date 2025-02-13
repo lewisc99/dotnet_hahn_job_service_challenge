@@ -22,12 +22,11 @@ var builder = Host.CreateDefaultBuilder(args)
            });
        });
 
-
        services.AddHangfire(config => config
-      .UseSqlServerStorage(connectionString, new Hangfire.SqlServer.SqlServerStorageOptions
-      {
-          PrepareSchemaIfNecessary = true
-      }));
+          .UseSqlServerStorage(connectionString, new Hangfire.SqlServer.SqlServerStorageOptions
+          {
+              PrepareSchemaIfNecessary = true
+          }));
 
 
        services.AddHangfireServer();
@@ -46,6 +45,7 @@ var builder = Host.CreateDefaultBuilder(args)
 
        services.AddScoped<IRecurringJobManager, RecurringJobManager>();
        services.AddScoped<JobScheduler>();
+
    });
 
 var app = builder.Build();

@@ -8,9 +8,9 @@ namespace Infrastructure.ApiClients
     {
         private readonly HttpClient _httpClient;
 
-        public DogApiClient(IHttpClientFactory httpClientFactory)
+        public DogApiClient(HttpClient httpClient)
         {
-            _httpClient = httpClientFactory.CreateClient("DogApi");
+            _httpClient = httpClient;
         }
 
         public async Task<ApiResponse<Breed>> FetchBreedsAsync(string? relativeUrl = "breeds")

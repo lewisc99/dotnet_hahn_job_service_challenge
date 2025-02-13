@@ -8,13 +8,7 @@ public class BreedsService
 {
     private readonly IRepositoryPagination<Breed> _repository;
 
-    public BreedsService(IRepositoryPagination<Breed> repository)
-    {
-        _repository = repository;
-    }
+    public BreedsService(IRepositoryPagination<Breed> repository) => _repository = repository;
 
-    public ApiResponse<Breed> GetPaginatedData(PaginationFilter<Breed> filter)
-    {
-        return _repository.GetPaginatedData(filter);
-    }
+    public ApiResponse<Breed> GetPaginatedData(PaginationFilter<Breed> filter) => _repository.GetPaginatedData(filter);
 }

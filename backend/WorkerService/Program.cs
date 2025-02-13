@@ -1,49 +1,59 @@
 using Hangfire;
 using Infrastructure.Repositories;
-using Infrastructure.ApiClients;
 using Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using JobLibrary;
-using Infrastructure.Database;
 using Domain.Interfaces;
-using Domain.Entities;
 using WorkerService;
-using Hangfire.MySql;
+using Infrastructure.ApiClients;
+using Domain.Database;
+using Domain.Entities;
 
 var builder = Host.CreateDefaultBuilder(args)
-    .ConfigureServices((hostContext, services) =>
-    {
-        var connectionString = hostContext.Configuration.GetConnectionString("DefaultConnection");
+   .ConfigureServices((hostContext, services) =>
+   {
+       var connectionString = hostContext.Configuration.GetConnectionString("DefaultConnection");
 
-        services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+       services.AddDbContext<ApplicationDbContext>(options =>
+       {
+           options.UseSqlServer(connectionString, builder =>
+           {
+               builder.MigrationsAssembly("Domain"); 
+           });
+       });
 
 
-        services.AddHangfire(config => config
-         .UseSimpleAssemblyNameTypeSerializer()
-         .UseDefaultTypeSerializer()
-         .UseStorage(new MySqlStorage(connectionString, new MySqlStorageOptions
-         {
-             TablesPrefix = "Hangfire"
-         })));
+       services.AddHangfire(config => config
+      .UseSqlServerStorage(connectionString, new Hangfire.SqlServer.SqlServerStorageOptions
+      {
+          PrepareSchemaIfNecessary = true
+      }));
 
-         services.AddHangfireServer();
 
-        services.AddScoped<IRepository<Breed>, BreedRepository>();
-        services.AddHttpClient("DogApi", client =>
-        {
-            client.BaseAddress = new Uri("https://dogapi.dog/api/v2/");
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
-        });
+       services.AddHangfireServer();
 
-        services.AddScoped<IBreedService, BreedService>();
-        services.AddScoped<BreedJob>();
-    })
-    .Build();
+       services.AddHttpClient<DogApiClient>(client =>
+       {
+           client.BaseAddress = new Uri("https://dogapi.dog/api/v2/");
+           client.DefaultRequestHeaders.Add("Accept", "application/json");
+       });
 
-RecurringJob.AddOrUpdate<BreedJob>(
-    "BreedJob",
-    job => job.ExecuteAsync(),
-    Cron.Hourly);
+       services.AddScoped<IRepository<Breed>, BreedRepository>();
 
-await builder.RunAsync();
+       services.AddScoped<IBreedService, BreedService>();
+
+       services.AddScoped<BreedJob>();
+
+       services.AddScoped<IRecurringJobManager, RecurringJobManager>();
+       services.AddScoped<JobScheduler>();
+   });
+
+var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var jobScheduler = scope.ServiceProvider.GetRequiredService<JobScheduler>();
+    jobScheduler.ScheduleJobs();
+}
+
+await app.RunAsync();

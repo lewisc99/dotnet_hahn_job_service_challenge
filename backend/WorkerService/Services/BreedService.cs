@@ -41,7 +41,7 @@ namespace WorkerService
                     var breed = new Breed
                     {
                         Id = id,
-                        Name = breedData.Name,
+                        Name = string.IsNullOrEmpty(breedData.Name) ? "" : breedData.Name,
                         Description = string.IsNullOrEmpty(breedData.Description) ? "" : breedData.Description,
                         LifeMin = breedData.LifeMin,
                         LifeMax = breedData.LifeMax,

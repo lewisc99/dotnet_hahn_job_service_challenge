@@ -1,10 +1,11 @@
-﻿using Domain.Entities;
+﻿using Application.Interfaces;
+using Domain.Entities;
 using Domain.Entities.Pagination;
 using Domain.Interfaces;
 
 namespace Services;
 
-public class BreedsService
+public class BreedsService: IBreedService
 {
     private readonly IRepositoryPagination<Breed> _repository;
 

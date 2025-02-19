@@ -4,6 +4,6 @@ namespace Domain.Interfaces
 {
     public interface IRepositoryPagination<T>
     {
-        ApiResponse<T> GetPaginatedData(PaginationFilter<T> filter);
+        Task<ApiResponse<T>> GetPaginatedDataAsync(PaginationFilter<T> filter);
     }
 }

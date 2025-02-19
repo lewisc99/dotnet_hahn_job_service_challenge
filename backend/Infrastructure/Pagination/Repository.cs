@@ -16,7 +16,7 @@ namespace Infrastructure.Pagination
             _context = context;
         }
 
-        public ApiResponse<T> GetPaginatedData(PaginationFilter<T> filter)
+        public async Task<ApiResponse<T>> GetPaginatedDataAsync(PaginationFilter<T> filter)
         {
             IQueryable<T> query = _context.Set<T>();
 

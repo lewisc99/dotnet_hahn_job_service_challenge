@@ -9,10 +9,10 @@ namespace API.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private IBreedService _breedService;
-        public WeatherForecastController(IBreedService breedService) => _breedService = breedService;
+        private IBreedPaginationService _breedService;
+        public WeatherForecastController(IBreedPaginationService breedService) => _breedService = breedService;
 
         [HttpPost]
-        public ApiResponse<Breed> get(PaginationFilter<Breed> filter) => _breedService.GetPaginatedData(filter);
+        public async Task<ApiResponse<Breed>> get(PaginationFilter<Breed> filter) => await _breedService.GetPaginatedDataAsync(filter);
     }
 }

@@ -5,11 +5,11 @@ using Domain.Interfaces;
 
 namespace Services;
 
-public class BreedsService: IBreedService
+public class BreedsService: IBreedPaginationService
 {
     private readonly IRepositoryPagination<Breed> _repository;
 
     public BreedsService(IRepositoryPagination<Breed> repository) => _repository = repository;
 
-    public ApiResponse<Breed> GetPaginatedData(PaginationFilter<Breed> filter) => _repository.GetPaginatedData(filter);
+    public async Task<ApiResponse<Breed>> GetPaginatedDataAsync(PaginationFilter<Breed> filter) => await _repository.GetPaginatedDataAsync(filter);
 }

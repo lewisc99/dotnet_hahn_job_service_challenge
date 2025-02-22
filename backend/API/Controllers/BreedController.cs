@@ -7,12 +7,12 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class BreedController : ControllerBase
     {
         private IBreedPaginationService _breedService;
-        public WeatherForecastController(IBreedPaginationService breedService) => _breedService = breedService;
+        public BreedController(IBreedPaginationService breedService) => _breedService = breedService;
 
-        [HttpPost]
-        public async Task<ApiResponse<Breed>> get(PaginationFilter<Breed> filter) => await _breedService.GetPaginatedDataAsync(filter);
+        [HttpGet("[Action]")]
+        public async Task<ApiResponse<Breed>> get([FromQuery] PaginationFilter<Breed> filter) => await _breedService.GetPaginatedDataAsync(filter);
     }
 }

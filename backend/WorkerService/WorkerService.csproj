@@ -31,4 +31,8 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\JobLibrary\JobLibrary.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Ioc\" />
+  </ItemGroup>
 </Project>

@@ -1,20 +1,17 @@
-﻿using Domain.Entities.Pagination;
+﻿using Domain.Database;
+using Domain.Entities.Pagination;
 using Domain.Interfaces;
 using Infrastructure.Extensions;
 using LinqKit;
-using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace Infrastructure.Pagination
 {
     public class Repository<T> : IRepositoryPagination<T> where T : class
     {
-        private readonly DbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public Repository(DbContext context)
-        {
-            _context = context;
-        }
+        public Repository(ApplicationDbContext context) => _context = context;
 
         public async Task<ApiResponse<T>> GetPaginatedDataAsync(PaginationFilter<T> filter)
         {

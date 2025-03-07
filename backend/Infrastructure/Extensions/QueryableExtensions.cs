@@ -12,9 +12,7 @@ namespace Infrastructure.Extensions
             var property = type.GetProperty(orderByProperty, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
 
             if (property == null)
-            {
                 throw new ArgumentException($"Property '{orderByProperty}' not found on type '{type}'.");
-            }
 
             var parameter = Expression.Parameter(type, "p");
             var propertyAccess = Expression.MakeMemberAccess(parameter, property);
@@ -24,9 +22,6 @@ namespace Infrastructure.Extensions
         }
 
 
-        public static IOrderedQueryable<T> OrderByDescendingDynamic<T>(this IQueryable<T> query, string orderByProperty)
-        {
-            return query.OrderByDynamic(orderByProperty, true);
-        }
+        public static IOrderedQueryable<T> OrderByDescendingDynamic<T>(this IQueryable<T> query, string orderByProperty) => query.OrderByDynamic(orderByProperty, true);
     }
 }
